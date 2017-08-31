@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<title>WT - Tracking</title>
+	<h:outputStylesheet name="css/tracking.css" />
+	<h:outputStylesheet name="webjars/font-awesome/4.4.0/css/font-awesome.css" />
+	<h:outputStylesheet name="css/pageTemplate.css" />
+	<h:outputStylesheet name="css/primefacesCustom.css" />
+</h:head> 
+<body>
+	<h:form id="tracking_form">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		<div id="header">
+			
+		</div>
+		
+		<div id="wrap_content">
+			<div id="top_content">	
+				<div id="user_info">
+					<p:growl id="messages" />
+		    		<p:splitButton id="info_id" value="#{trackingController.userName}" update="messages" icon="fa fa-user" >
+			        	<p:separator />
+			        	<p:menuitem value="Logout" icon="icon-logout" action="#{trackingController.backToLogin()}"/>
+		   			</p:splitButton>
+	   			</div>
+	   			<div id="overdue">	
+	   				<p:link value="Overdue" outcome="overdue" styleClass="plinkCustom"></p:link>
+				</div>
+				<div id="testing">
+					<p:link value="Testing" outcome="testscenario" styleClass="plinkCustom"></p:link>
+				</div>
+				<div id="tracking">
+					<p:link value="Tracking" styleClass="plinkCustom"></p:link>
+				</div>
+			</div>			
+		</div>		
+		<div id="wrap_tracking">
+			<div id="tracking_content">
+				<div id="chart_grid">	
+					<div id="chart_name">
+						<h:outputLabel value="Datahub" style="font-size:200%;margin-left:30px;"/>												
+					</div>
+					<div id="draw_chart">				
+						<p:chart type="line" model="#{trackingController.chart}" style="height:300px;width:700px;" >					
+						</p:chart>
+					</div>
+					<div id="chart_detail">
+						<h:outputText value="In the past 9 days:" style="font-size:20px;" />
+						<div class="tests_details">
+							<div class="test_passed"/>
+							<div class="test_failed"/>
+							<div class="test_not_run"/>
+							<div class="test_blocked"/>
+						</div>
+						<div class="tests_numbers">
+							<h:panelGrid style="margin-top:10px;">
+								<h:outputLabel value="#{trackingController.testPassed} Test Passed" style="font-weight:bold;"/>
+								<h:outputLabel value="#{trackingController.percentTestPassed}% set Passed" />
+							</h:panelGrid>
+							
+							<h:panelGrid style="margin-bottom:10px;">
+								<h:outputLabel value="#{trackingController.testFailed} Test Failed" style="font-weight:bold;" />
+								<h:outputLabel value="#{trackingController.percentTestFailed}% set Failed" />
+							</h:panelGrid>
+							
+							<h:panelGrid style="margin-bottom:10px;">
+								<h:outputLabel value="#{trackingController.testNotRun} Test Not run" style="font-weight:bold;"/>
+								<h:outputLabel value="#{trackingController.percentTestNotRun}% set Not run" />
+							</h:panelGrid>
+							
+							<h:panelGrid>
+								<h:outputLabel value="#{trackingController.testBlocked} Test Blocked" style="font-weight:bold;"/>
+								<h:outputLabel value="#{trackingController.percentTestBlocked}% set Blocked" />
+							</h:panelGrid>
+						</div>	
+					</div>
+				</div>				
+				<div id="daily_activity">	
+					<div id="activity">
+						<h:outputLabel value="Activity" style="font-size:125%;margin-left:30px;"/>
+						<h:outputLabel value="History | Test runs" style="font-size:100%;margin-left:570px;"/>
+					</div>
+					
+					<div id="tracking_activity">
+						<h:outputLabel value="#{trackingController.dailyDate}" style="font-size:150%;text-decoration:underline;"/>						
+					</div>
+					
+					<p:dataTable id="activity_table" value="#{trackingController.dailyRecords}" var="item" style="background-color:none!important;" paginator="true" paginatorPosition="bottom" rows="8" >
+						<p:column style="width:50px;">
+							<h:outputText value="#{item.status}" />
+						</p:column>
+						<p:column style="width:450px">
+							<p:link value="#{item.caseName}" outcome="testcaseDetail" style="color:rgb(41, 133, 245);">
+								<f:param name="id" value="#{item.id}" />
+							</p:link>
+						</p:column>
+						<p:column style="width:150px;">
+							<h:outputText value="Tested by: " style="font-size:90%;"/>
+							<h:outputText value=" #{item.author}" style="font-size:90%;font-weight:bold;"/>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<div id="action_panel">
+				<div class="action_detail">
+					<div class="detail_view"><p><i>Detail view</i></p></div>
+					<div class="testcaseview">
+						<div class="testbox">
+							<div class="testcasesquare"></div>
+						</div>
+						<div class="testbox">							
+							<div class="innertext">
+									<h:outputText value="Test cases" style="font-size:120%;"/>
+							</div>
+							<div class="innerdetail">
+								  	<p:commandLink value="Add" action="#{trackingController.redirectToTestCase()}" style="font-size:80%;" styleClass="liCustom"/>
+									<h:outputText value=" | " />
+									<p:commandLink value="View all" onclick="PF('dlView1').show();" style="font-size:80%;" styleClass="liCustom"/>																																	
+							</div>									
+						</div>
+						<!-- ***************************Test case dialog view*********************************** -->
+						
+						<p:dialog id="dlgCase" header="Test case view" modal="true" resizable="false" widgetVar="dlView1" height="300" width="600">										
+							<p:selectManyCheckbox label="Select case" value="#{trackingController.selectedCase}" columns="1" layout="grid" converter="javax.faces.Integer" >
+								<f:selectItems  value="#{trackingController.allCase}" var="case" itemLabel="Test case: #{case.caseName}, created by #{case.author}"  itemValue="#{case.id}"  >								
+									
+									<p:commandButton value="Update" action="#{trackingController.updateCase()}" update="updCase" oncomplete="PF('dlView2').show();" />
+									<p:commandButton value="Copy" action="#{trackingController.copyCase()}" update="tracking_form:" oncomplete="PF('dlView2').show();" />
+									<p:commandButton value="Delete" action="#{trackingController.deleteCase}" rendered="#{trackingController.adminAllowedAccess}" update="tracking_form">
+										<p:remoteCommand name="initializePageData" autoRun="true" action="#{trackingController.init()}" />
+									</p:commandButton>							
+									<p:commandButton value="Cancel" onsuccess="PF('dlView1').hide();"/>
+								
+								</f:selectItems>
+							</p:selectManyCheckbox>							
+						</p:dialog>
+						
+						<p:dialog id="updCase" header="Test case view" resizable="false" widgetVar="dlView2" height="560" width="820">															                					                
+							<ui:repeat var="item" value="#{trackingController.SelectedTestCase()}" >
+					            <h:panelGrid columns="2" >					          					                
+					                <h:outputText value="Case Name" />
+					                <p:inputText value="#{item.caseName}" style="width:645px;"/>
+					                
+					                <h:outputText value="Priority" />
+					                <p:selectOneMenu id="prior" value="#{item.priority}" style="width:615px;">
+					        		<f:selectItem itemLabel="Highest" itemValue="Highest" />
+								        <f:selectItem itemLabel="High" itemValue="High" />
+								        <f:selectItem itemLabel="Medium" itemValue="Medium" />
+								        <f:selectItem itemLabel="Low" itemValue="Low" />
+								    	<f:selectItem itemLabel="Lowest" itemValue="Lowest" />
+								    </p:selectOneMenu>
+								    
+								    <h:outputText value="Environment:" />
+									<p:selectOneMenu id="console" value="#{item.environment}" style="width:615px;" >
+							            <f:selectItem itemLabel="Database" itemValue="Database" />
+							            <f:selectItem itemLabel="OS" itemValue="OS" />
+							            <f:selectItem itemLabel="Browser" itemValue="Browser" />
+							        </p:selectOneMenu>
+							        
+							        <h:outputText value="Prerequisites:" />
+									<p:inputText value="#{item.prerequisites}" style="width:645px;" />
+					            	
+					            	<h:outputText value="Subenvironment: " />
+				        		    <p:selectOneMenu value="#{item.subEnvironment}" style="width:615px;" >
+				            			<f:selectItems value="#{testCaseController.subEnvironment}" />
+			        				</p:selectOneMenu>
+			        				
+			        				<h:outputText value="Related links:" />    
+								    <p:selectCheckboxMenu id="menu" value="#{item.releatedLink}" label="Link"
+							                              filter="true" filterMatchMode="startsWith" panelStyle="width:300px">
+							            <f:selectItems value="#{testCaseDetailController.allLinks}" />
+							            <f:attribute name="collectionType" value="java.util.ArrayList"/> 
+							        </p:selectCheckboxMenu>
+							        
+							        <h:outputText value="Description:" />
+							        <p:inputTextarea rows="7" cols="70" value="#{item.desription}" />
+							        
+							        <h:outputText value="Author: "/>
+									<h:outputText value="#{item.author}" />
+									
+									<h:outputText value="Owner:"  />
+				        			<p:selectOneMenu id="advanced" value="#{item.owner}" panelStyle="width:100px;" effect="fade" style="width:615px;" filter="true" filterMatchMode="startsWith">
+				            			<f:selectItems value="#{testCaseController.allUsers}" />
+				 					</p:selectOneMenu>
+									
+									<p:outputLabel value="Execution:" />
+        							<p:calendar value="#{item.executedDate}" pattern="MM/dd/yyyy HH:mm:ss" />									
+					            </h:panelGrid>
+					        </ui:repeat>
+					      	
+					      	<p:commandButton value="Update" rendered="#{trackingController.isUpdateFlag}" action="#{trackingController.update()}" update="dlgCase"  oncomplete="PF('dlView2').hide();"/>
+					      	<p:commandButton value="Copy" rendered="#{trackingController.isCreateFlag}" action="#{trackingController.copyTest()}" update="dlgCase" oncomplete="PF('dlView2').hide();"/>  	                   						   				          						
+							<p:commandButton value="Cancel" action="#{trackingController.cancel()}" onsuccess="PF('dlView2').hide();"/>
+						</p:dialog>
+						
+					
+					</div>
+						
+					<div class="testsuitview">
+						<div class="testbox">
+							<div class="testsuitsquare"></div>
+						</div>
+						<div class="testbox">
+							<div class="innertext">
+									<h:outputText value="Test suits" style="font-size:120%;"/>
+							</div>
+							<div class="innerdetail">
+									<p:commandLink value="Add" onclick="PF('dlg2').show();" style="font-size:80%;" styleClass="liCustom"/>
+									<h:outputText value=" | " />
+									<p:commandLink value="View all" onclick="PF('dlg3').show();" style="font-size:80%;" styleClass="liCustom"/>
+									
+									<!-- *********************Test suit add******************************* -->
+									<p:dialog id="dlgSuit" header="Test suits" widgetVar="dlg2" modal="true" resizable="false" width="500px" height="300" >
+										<h:panelGrid columns="2" >
+											<p:outputLabel value="Name" />
+											<p:inputText value="#{trackingController.suitName}" styleClass="inputCustom" />
+											<p:outputLabel value="Expectation"/>
+											<p:inputTextarea value="#{trackingController.expecation}" cols="33" rows="5" maxlength="70" />
+											<p:outputLabel/>
+											<p:commandButton value="Create" action="#{trackingController.saveSuit}" onsuccess="PF('dlg2').hide();" update=":tracking_form" styleClass="buttonCus" />
+										</h:panelGrid>
+									</p:dialog>
+									
+									<!-- **********************Test suit view****************************** -->
+									<p:dialog id="dlgSuitView" header="List test suits" widgetVar="dlg3" modal="true" resizable="false" width="500px" height="300" >					
+											<p:selectManyCheckbox label="Select suit" value="#{trackingController.selectSuit}" columns="1" layout="grid"  >
+												<f:selectItems  value="#{trackingController.allSuit}" var="suit" itemLabel="#{suit.testSuitName}" itemValue="#{suit.id}" ></f:selectItems>
+											</p:selectManyCheckbox>
+											<p:commandButton value="Delete" action="#{trackingController.deleteSuit()}" update="dlgSuitView" />
+											<p:commandButton value="Cancel" onclick="dlg3.hide();" />
+									</p:dialog>
+							</div>						
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+		</div>
+	</h:form>
+</body> 
+</html>

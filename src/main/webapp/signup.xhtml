@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<title>WT - Sign up</title>
+	<h:outputStylesheet name="css/main.css" />
+	<h:outputStylesheet name="css/primefacesCustom.css" />
+</h:head> 
+<body> 
+	<h:form id="signupForm">
+		<div id="header">
+		
+		</div>
+		<div id="content">
+			<div class="panel_input">  				
+				<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+					
+					<p:outputLabel value="Username:" />		
+					<p:inputText id="input_username" value="#{signupController._username}" >
+						<f:validator validatorId="notEmptyValidator" />
+					</p:inputText>					
+					<h:message for="input_username" style="color:red;font-size:120%;"/>
+					
+					<p:outputLabel value="Email:" />		
+					<p:inputText id="input_email" value="#{signupController._email}"  >
+						<f:validator validatorId="emailValidator" />
+					</p:inputText>
+					<h:message id="emailMsg" for="input_email" style="color:red;font-size:120%;"/>
+					
+					<p:outputLabel value="Password:" />		
+					<p:password id="input_pas" feedback="true" value="#{signupController._password}" >
+						<f:validator validatorId="passwordValidator" />
+						<f:attribute name="input_confirmpass" value="#{input_confirmpass}" />
+					</p:password>
+					<h:message for="input_pas" style="color:red;font-size:120%;"/>
+					
+					<p:outputLabel value="Repeat password:" />		
+					<p:inputText id="input_confirmpass" type="password" value="#{signupController._passwordConfirm}"
+					 			 binding="#{input_confirmpass}">						
+					</p:inputText>
+					<h:message for="input_confirmpass" style="color:red;"/>
+					
+					<p:outputLabel/>
+					
+					<p:commandButton id="btn_signup" value="Sign up" action="#{signupController.registration()}" styleClass="customStyleButton" update=":signupForm" />
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				</h:panelGrid>
+			</div>
+		</div>
+		<div id="footer">
+		
+		</div>
+	</h:form>
+</body> 
+</html>

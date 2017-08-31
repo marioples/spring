@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+
+#top_content{
+	border-bottom: solid;
+	border-color: rgb(7, 40, 64);
+}
+
+.overdue_info {
+	height: 100px;
+	width: 950px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.scroller_info {
+	width: 950px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#wrap_overdue {
+	min-height: 100%;
+}
+
+#wrap_overdue:AFTER {
+	height: 100px;
+}
+
+.inner1{
+	float: left;
+	padding-bottom: 10px;
+}
+
+.inner2{
+	float: left;
+	clear: left; 
+	font-size: 120%;
+}

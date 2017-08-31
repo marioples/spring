@@ -1,0 +1,186 @@
+@CHARSET "UTF-8";
+
+body {
+	background-image: url("#{resource['img:brickwall.png']}");
+}
+
+#wrap_tracking {
+	width: 1050px;
+  	margin-left: auto;
+  	margin-right: auto;
+  	height: 800px;
+}
+
+#tracking_content {
+	float: left;
+}
+
+#action_panel {
+	background-color: grey;
+   	overflow: hidden;
+   	height: 100%;
+   	
+}
+
+#chart_grid, #daily_activity {
+	width: 850px;
+	height: 400px;
+}
+
+#top_content {
+	border-bottom: solid;
+	border-color: rgb(7, 40, 64);
+}
+
+#chart_name {
+	background-color: rgb(209, 229, 253);
+	height: 65px;
+	width: 850px;
+	line-height: 65px;
+}
+
+#activity {
+	background-color: rgb(204, 204, 153);
+	border-color: rgb(215, 215, 215);
+	border-radius: 5px;
+	width: 850px;
+	height: 40px;
+	line-height: 40px; 
+}
+
+#tracking_activity {
+	height: 50px;
+	line-height: 50px;
+}
+
+#chart_detail {
+	width: 150px;
+	height: 300px;
+	float: right;
+	padding-top: 10px;
+}
+
+#draw_chart {
+	height:300px;
+	width:700px;
+	float: left;
+	
+}
+
+.tests_numbers{
+	float: left;
+	width: 125px;
+	height: 300px;
+}
+
+.tests_details{
+	float: left;
+	width: 25px;	
+}
+
+.test_passed{
+	width: 20px;
+	height: 20px;
+	background: #268436;
+	margin-top: 20px;
+	margin-bottom: 30px;
+	border-color: gray;
+	border-style: solid;
+	border-width: 1px; 
+}
+
+.test_failed{
+	width: 20px;
+	height: 20px;
+	background: #D64B28;
+	margin-bottom: 30px;
+	border-color: gray;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.test_not_run{
+	width: 20px;
+	height: 20px;
+	background: #C0C0C0;
+	margin-bottom: 30px;
+	border-color: gray;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.test_blocked{
+	width: 20px;
+	height: 20px;
+	background: #E8E81B;
+	border-color: gray;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.action_detail{
+	width: 180px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+p{
+	margin-top: 0em;
+	font-size: 20px;
+}
+
+.detail_view{
+	margin-top: 30px;
+	padding-left: 10px;
+	height: 35px;
+	background-color: rgb(235, 235, 235);
+	border-color: rgb(167, 167, 167);
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 3px;
+	line-height: 30px;
+}
+
+.testcaseview, .testsuitview{
+		 
+}
+
+.testcasesquare{
+	width: 40px;
+	height: 40px;
+	background-color: rgb(226, 199, 114);
+	border-color: black;
+	border-style: solid;
+	border-width: 1px;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.testsuitsquare{
+	width: 40px;
+	height: 40px;
+	background-color: rgb(137, 211, 150);
+	border-color: black;
+	border-style: solid;
+	border-width: 1px;
+	margin-top: 20px;	
+	margin-left: 20px;
+}
+
+.testbox{
+	float: left;
+    width: 80px;
+    height: 80px;
+}
+
+.innertext{
+	float: left;
+	margin-top: 15px;
+	font-style: italic;
+}
+
+.innerdetail{
+	float: left;
+	clear: left;
+	margin-top: 5px;
+}

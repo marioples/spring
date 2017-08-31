@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<title>WT - Overdue</title>
+	<h:outputStylesheet name="css/overdue.css" />
+	<h:outputStylesheet name="webjars/font-awesome/4.4.0/css/font-awesome.css" />
+	<h:outputStylesheet name="css/pageTemplate.css" />
+	<h:outputStylesheet name="css/primefacesCustom.css" />
+</h:head> 
+<body> 
+	<h:form id="overdue_form">
+		<div id="header">
+			
+		</div>
+		<!-- Navigation on   -->
+		<div id="wrap_content">
+			<div id="top_content">
+			<div id="user_info">
+				<p:growl id="messages" />
+		    		<p:splitButton id="info_id" value="#{overdueController.userName}" update="messages" icon="fa fa-user" >
+			        	<p:separator />
+			        	<p:menuitem value="Logout" icon="icon-logout" action="#{overdueController.backToLogin()}"/>
+		   			</p:splitButton>
+   			</div>
+   			<div id="overdue">	
+   				<p:link value="Overdue" styleClass="plinkCustom"></p:link>
+			</div>
+			<div id="testing">
+				<p:link value="Testing" outcome="testscenario" styleClass="plinkCustom"></p:link>
+			</div>
+			<div id="tracking">
+				<p:link value="Tracking" outcome="tracking" styleClass="plinkCustom"></p:link>
+			</div>
+			</div>
+		</div>
+		
+		<div id="wrap_overdue">
+			<div class="overdue_info">
+				<div class="inner1"><h:outputLabel value="Overdue Items" style="font-size:160%" /></div>
+				<div class="inner2"><h:outputText value="You have #{overdueController.countOverdueTests} overdue cases, with status 'Not run'"  /></div>
+			</div>
+	 		<div class="scroller_info">  
+			
+				<p:dataScroller value="#{overdueController.overdueTests}" var="item" chunkSize="3" >
+			 
+			        <h:panelGrid columns="2" style="width:100%;" styleClass="overduePanel" >   
+			 
+			            <p:outputPanel>
+			                <h:panelGrid columns="2" cellpadding="5">
+			                    <h:outputText value="Case name:" />
+			                    <p:link value="#{item.caseName}" outcome="testcaseDetail" style="font-weight:bold;color:#008CBA">
+			                    	<f:param name="id" value="#{item.id}" />
+			                    </p:link>
+			 
+			                    <h:outputText value="Author:" />
+			                    <h:outputText value="#{item.author}" style="font-weight: bold"/>
+			 
+			                    <h:outputText value="Status:" />
+			                    <h:outputText value="#{item.status}" style="font-weight: bold"/>
+			                </h:panelGrid>
+			            </p:outputPanel>
+			        </h:panelGrid>
+	    		</p:dataScroller>
+	    	</div>
+		</div>		
+		
+		<div id="footer">
+		</div>
+	</h:form>
+</body> 
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#protected#tracking.xhtml"
+  PATH="/protected/tracking.xhtml" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#protected#tracking.xhtml:0" NAME="item"
+   PATH="/protected/tracking.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="redirectToLogin::#login.xhtml" NAME="output"
+    PATH="/login.xhtml" TARGET="rules:#login.xhtml"
+    TITLE="redirectToLogin" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#protected#testscenario.xhtml"
+  PATH="/protected/testscenario.xhtml" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#protected#testscenario.xhtml:0" NAME="item"
+   PATH="/protected/testscenario.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="redirectFromScenarioToLogin::#login.xhtml"
+    NAME="output" PATH="/login.xhtml" TARGET="rules:#login.xhtml"
+    TITLE="redirectFromScenarioToLogin" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#protected#overdue.xhtml"
+  PATH="/protected/overdue.xhtml" SHAPE="32,241,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#protected#overdue.xhtml:0" NAME="item"
+   PATH="/protected/overdue.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="redirectFromOverdueToLogin::#login.xhtml"
+    NAME="output" PATH="/login.xhtml" TARGET="rules:#login.xhtml"
+    TITLE="redirectFromOverdueToLogin" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+</PROCESS>

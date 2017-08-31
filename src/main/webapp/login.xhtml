@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<title>WT - Login</title>
+	<h:outputStylesheet name="css/main.css" />
+	<h:outputStylesheet name="css/login.css" />
+	<h:outputStylesheet name="css/primefacesCustom.css" />
+</h:head> 
+<body> 
+	<h:form id="login-form" prependId="false">
+		<div id="header"/>
+		<div id="content">
+			<div class="panel_input">				
+				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">			
+					<p:outputLabel for="j_username" value="Username:" />			
+					<p:inputText id="j_username"  />
+					<p:outputLabel for="j_password" value="Password:" />
+					<p:inputText id="j_password" type="password" />
+					<p:outputLabel value=""/>
+					<p:commandButton ajax="false" id="btn_login" value="Login" action="#{loginController.doLogin()}" styleClass="customStyleButton" />
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				</h:panelGrid>				
+			</div>		
+		</div>
+		<div id="footer"/>
+	</h:form>
+</body> 
+</html>

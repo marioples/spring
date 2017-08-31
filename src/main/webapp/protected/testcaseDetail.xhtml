@@ -1,0 +1,195 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:viewParam name="id" value="#{testCaseDetailController.id}"></f:viewParam>
+	<f:viewAction action="#{testCaseDetailController.loadCase()}" ></f:viewAction>
+</f:metadata>
+<h:head>
+	<title>WT - Test case detail</title>
+	<h:outputStylesheet name="css/testcase.css" />
+	<h:outputStylesheet name="webjars/font-awesome/4.4.0/css/font-awesome.css" />
+	<h:outputStylesheet name="css/pageTemplate.css" />
+	<h:outputStylesheet name="css/primefacesCustom.css" />
+</h:head>
+<body>
+	<h:form id="detailForm">
+		<div id="header"></div>
+
+		<div id="test_content">
+			<div id="detail">
+				<div id="content_details">
+					<div id="detail_background">
+						<h:outputLabel value="Detail" style="margin-left:15px;font-size:130%;" />	
+					</div>
+					<h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5">
+						<p:outputLabel value="Test case name: "/>
+						<p:inputText value="#{testCaseDetailController.testCase.caseName}" >
+							<p:ajax event="blur" />
+						</p:inputText>
+						
+						<p:outputLabel value="Environment:" />
+						<p:selectOneMenu id="console" value="#{testCaseDetailController.testCase.environment}" style="width:227px;" >
+				            <p:ajax event="blur" />
+				            <f:selectItem itemLabel="Database" itemValue="Database" />
+				            <f:selectItem itemLabel="OS" itemValue="OS" />
+				            <f:selectItem itemLabel="Browser" itemValue="Browser" />
+				        </p:selectOneMenu>
+				        
+				        <p:outputLabel value="Prerequisites:" />
+						<p:inputText value="#{testCaseDetailController.testCase.prerequisites}" >
+							<p:ajax event="blur" />
+						</p:inputText>
+				        
+				        <p:outputLabel for="car" value="Subenvironment: " />
+	        		    <p:selectOneMenu id="car" value="#{testCaseDetailController.testCase.subEnvironment}" style="width:227px;" >
+	            			<f:selectItem itemLabel="Select One" itemValue="" />
+	            			<f:selectItems value="#{testCaseDetailController.subEnvironment}" />
+        				</p:selectOneMenu>			       
+        				
+        				<p:outputLabel/>
+        				<p:outputLabel/>
+				       
+						<p:outputLabel value="Priority:" />
+						<p:selectOneMenu id="prior" value="#{testCaseDetailController.testCase.priority}" style="width:125px">
+					        <p:ajax event="blur" />
+					        <f:selectItem itemLabel="Highest" itemValue="Highest" />
+					        <f:selectItem itemLabel="High" itemValue="High" />
+					        <f:selectItem itemLabel="Medium" itemValue="Medium" />
+					        <f:selectItem itemLabel="Low" itemValue="Low" />
+					    	<f:selectItem itemLabel="Lowest" itemValue="Lowest" />
+					    </p:selectOneMenu>
+					        
+					    <p:outputLabel value="Related links:" />    
+					    <p:selectCheckboxMenu id="menu" value="#{testCaseDetailController.testCase.releatedLink}" label="Link"
+				                              filter="true" filterMatchMode="startsWith" panelStyle="width:300px">
+				            <f:selectItems value="#{testCaseDetailController.allLinks}" />
+				            <f:attribute name="collectionType" value="java.util.ArrayList"/> 
+				        </p:selectCheckboxMenu>
+				        
+				       
+				        
+					</h:panelGrid>
+					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+						<p:outputLabel value="Test procedure done:" />
+						<p:progressBar id="progressBarClient" widgetVar="pbAjax" ajax="true" value="#{testCaseDetailController.testCase.progress}" labelTemplate="{value}%" style="width:500px" />
+					</h:panelGrid>
+					
+					<p:growl id="growl" showDetail="true" sticky="true" />
+					<p:outputLabel value="Steps for testing:" style="margin-left:10px;"/>
+					<div id="testing_component">
+						<h:panelGroup id="display" style="font-size:120%" >					
+	    					<ui:repeat var="item" value="#{testCaseDetailController.testCase.steps.entrySet()}">
+	    						<table>
+							        <tr><h:selectBooleanCheckbox value="#{testCaseDetailController.testCase.steps[item]}" converter="javax.faces.Boolean" /></tr>
+							        <tr><h:outputText value="#{testCaseDetailController.testCase.steps[item]}" /></tr>
+							    </table> 
+							</ui:repeat>				    											
+						</h:panelGroup>
+						
+						<i><p:commandLink value="Add step" onclick="PF('dlg2').show();" styleClass="stepCustom" /></i>
+						<p:commandButton value="Confirm" onclick="PF('pbAjax').start();" styleClass="confirmCustom" action="#{testCaseDetailController.confirmButton()}" />			
+					</div>
+					
+					<p:dialog  header="Step" widgetVar="dlg2" modal="true" height="200" width="500" resizable="false">
+						    <h:panelGrid columns="2" style="margin-bottom:2px" cellpadding="1">
+							    <p:outputLabel value="Add step:" />
+							    <p:inputTextarea maxlength="70" value="#{testCaseDetailController.step}" rows="6" cols="33" />
+							    <p:outputLabel/>
+							    <p:commandButton value="Add" action="#{testCaseDetailController.saveStep()}"  update="display,growl" onsuccess="PF('dlg2').hide();" styleClass="buttonCus"/>								     
+							</h:panelGrid>
+					</p:dialog>
+									
+				</div>
+				
+				<div id="description_details">
+					<div id="formatDescription" >	
+						<h:outputLabel value="Desription" style="margin-left:15px;font-size:130%;" />
+					</div>
+					<div id="description">						
+						<p:inputTextarea rows="7" cols="70" value="#{testCaseDetailController.testCase.desription}" />
+					</div>
+				</div>
+				<div id="comment_detail">
+					<div id="format_comment" >	
+						<h:outputLabel value="Comment" style="margin-left:15px;font-size:130%;" />
+						<p:commandButton icon="fa fa-plus" onclick="PF('dlg3').show();" styleClass="refreshCustom" />
+					</div>
+				</div>
+					<div class="scroller_info">  
+				
+					<p:dataScroller value="#{testCaseDetailController.testCase.comments}" var="item" chunkSize="3" styleClass="commentScroller">
+				 
+				        <h:panelGrid columns="2" style="width:100%;" styleClass="commentPanel" >   
+				 
+				            <p:outputPanel>
+				                <h:panelGrid columns="1" cellpadding="5">
+				                	<p:column style="width:150px;">
+										<h:outputText value=" #{item.userComment} - " style="font-size:90%;font-weight:bold;"/>
+										<h:outputText value="#{item.posted_date}" style="font-weight:bold;">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"/>
+										</h:outputText>
+									</p:column>
+										<p:inputTextarea maxlength="255" value="#{item.commentDescription}" rows="5" cols="80" />												                    
+				                </h:panelGrid>
+				            </p:outputPanel>
+				        </h:panelGrid>
+		    		</p:dataScroller>
+		    	</div>
+				<div id="button_create">
+					<p:commandButton value="Update" action="#{testCaseDetailController.update()}" />					
+				</div>
+			</div>
+			
+			<!-- *************************************************************************** -->
+			
+			<div id="people_details">
+				<div class="people">
+					<h:outputLabel value="People" style="margin-left:15px;font-size:130%;" />	
+				</div>
+				<h:panelGrid columns="2" style="margin-bottom:30px" cellpadding="5">
+					
+					<p:outputLabel value="Author:" id="author_label" />
+					<p:outputLabel value="#{testCaseDetailController.testCase.author}" />
+					
+					<p:outputLabel for="advanced" value="Owner:"  />
+        			<p:selectOneMenu id="advanced" value="#{testCaseDetailController.testCase.owner}" panelStyle="width:180px" effect="fade" var="owner" style="width:160px" filter="true" filterMatchMode="startsWith">
+            			<f:selectItems value="#{testCaseDetailController.allUsers}" />
+ 					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<div class="dates">
+					<h:outputLabel value="Date" style="margin-left:15px;font-size:130%;" />	
+				</div>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel  value="Created: " />
+					<p:outputLabel  value="#{testCaseDetailController.testCase.createdDate}" >
+						<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm"/>
+					</p:outputLabel>
+					<p:outputLabel  value="Updated: " />
+					<p:outputLabel  value="#{testCaseDetailController.testCase.updatedDate}" >
+						<f:convertDateTime type="date" pattern="dd.MM.yyyy HH:mm"/>
+					</p:outputLabel>
+					<p:outputLabel for="datetime" value="Execution:" />
+        			<p:calendar id="datetime" value="#{testCaseDetailController.testCase.executedDate}" pattern="MM/dd/yyyy HH:mm:ss" />	        				
+				</h:panelGrid>
+			</div>
+		</div>
+		
+	</h:form>
+	
+	<h:form id="commentForm">
+		<p:dialog  header="Comment" widgetVar="dlg3" modal="true" height="200" width="500" resizable="false">
+			<h:panelGrid columns="2" style="margin-bottom:2px" cellpadding="1">
+				<p:outputLabel value="Add comment:" />
+				<p:inputTextarea maxlength="255" value="#{testCaseDetailController.commentDescription}" rows="6" cols="33" />
+				<p:outputLabel/>
+				<p:commandButton value="Add" action="#{testCaseDetailController.saveComment()}"  update="detailForm" onsuccess="PF('dlg3').hide();" styleClass="buttonCus"/>								     
+			</h:panelGrid>
+		</p:dialog>
+	</h:form> 
+</body>
+</html>

@@ -1,0 +1,129 @@
+@CHARSET "UTF-8";
+
+form .customStyleButton{
+	background-color: white;
+    color: black;
+    border: 1px solid rgb(118, 189, 213); /* Light blue */
+	background-image: none;
+    font-family: arial, sans-serif;
+    width: 227px;
+    -webkit-transition-duration: 400ms;
+    -moz-transition-duration: 400ms;
+    -o-transition-duration: 400ms;
+    transition-duration: 400ms;
+    box-shadow: none!important;
+}
+
+form .customStyleButton:HOVER {
+	background-color: rgb(118, 189, 213); /* Light blue */
+    color: white;
+    font-family: arial, sans-serif;
+    box-shadow: none!important;
+}
+
+form .plinkCustom {
+	color: rgb(94, 110, 140);
+	text-decoration: none;
+	font-family: Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
+	font-size: 1.2em; 
+}
+
+form .plinkCustom:HOVER {
+	color: rgb(255, 249, 233);
+}
+
+form .testcaseCustom {
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	background-color: white;
+	color: rgb(51, 51, 51);
+	border-color: rgb(211, 211, 211);
+	border-width: 2px;  
+}
+
+form .removeCustom {
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	background-color: white;
+	color: rgb(51, 51, 51);
+	border-color: rgb(211, 211, 211);
+	border-width: 2px;  
+}
+
+form .refreshCustom {
+	background-color: white;
+	color: rgb(51, 51, 51);
+	border-color: rgb(211, 211, 211);
+	border-width: 2px; 
+}
+
+form .searchCustom {
+	background-color: white;
+	color: rgb(51, 51, 51);
+	border-color: rgb(211, 211, 211);
+	border-width: 2px;
+}
+
+form .suitCustom{
+	background-color: rgb(255, 255, 255);
+	color: rgb(51, 51, 51);
+	box-shadow: none!important;
+	border-color: black;
+	border-width: 1px;
+}
+
+form .confirmCustom{
+	background-color: rgb(255, 255, 255);
+	color: rgb(51, 51, 51);
+	box-shadow: none!important;
+	border-color: rgb(215, 215, 215);
+	border-width: 1px;
+	left: 680px;
+	top: 690px;
+	position: absolute;
+}
+
+form .stepCustom {
+	color: rgb(123, 169, 242);
+}
+
+.ui-widget-content{
+	border: none!important; 
+}
+
+form .overduePanel{
+	background: grey;
+	background: -webkit-linear-gradient(rgb(171, 172, 173), rgb(242, 244, 247)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(rgb(171, 172, 173), rgb(242, 244, 247)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(rgb(171, 172, 173), rgb(242, 244, 247)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(rgb(171, 172, 173), rgb(242, 244, 247)); /* Standard syntax */
+    height: 150px;
+}
+
+form .inputCustom{
+	width: 313px!important;
+}
+
+form .liCustom{
+	color: rgb(7, 31, 152);
+}
+
+form .buttonCus{
+	width: 323px;
+}
+
+form .commentPanel{
+	height: 150px;
+}
+
+form .commentScroller{
+	background: none!important;
+}
+
+.ui-datascroller-content ui-widget-content ui-corner-all{
+	background: none!important;
+}

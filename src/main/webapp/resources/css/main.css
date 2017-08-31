@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+
+body {
+    background-color: white;
+    margin: 0;
+ 	padding: 0;
+}
+	
+#header {
+	width: 100%;
+	height: 100px;
+	background-color: rgb(7, 40, 64);
+	border-width: 5px;
+	border-color: rgb(0, 58, 85);
+	border-bottom: solid;
+}
+
+#content {
+	width: 100%;
+	height: 500px;
+	background-image: url("#{resource['img:laptop-on-work-desk.png']}");
+	background-repeat:no-repeat;
+	background-position: center center;
+}
+
+#footer {
+	width: 100%;
+	height: 100px;
+	background-color: rgb(7, 40, 64);
+	border-width: 5px;
+	border-color: rgb(7, 40, 64);
+	border-top: solid;
+}
+
+.panel_input{
+	padding-left: 100px;
+	padding-top: 50px;
+}
+
+.page_info{
+	padding-left: 300px;
+	padding-top: 50px;
+}
+
+.buttons_content{
+	padding-left: 350px;
+	padding-top: 150px;
+}

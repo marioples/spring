@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	 <title>WT - Testing</title>
+	 <h:outputStylesheet name="css/testsuit.css" />
+	 <h:outputStylesheet name="css/pageTemplate.css" />
+	 <h:outputStylesheet name="webjars/font-awesome/4.4.0/css/font-awesome.css" />
+	 <h:outputStylesheet name="css/primefacesCustom.css" />	 
+</h:head> 
+<body>
+	<h:form id="form_testing">
+		<div id="header"/>			
+		<div id="wrap_content">
+			<div id="top_content">
+				<div id="user_info">
+					<p:growl id="messages" />
+		    		<p:splitButton id="info_id" value="#{testScenarioController.userName}" update="messages" icon="fa fa-user" >
+			        	<p:separator />
+			        	<p:menuitem value="Logout" icon="icon-logout" action="#{testScenarioController.backToLogin()}"/>
+			        	
+		   			</p:splitButton>
+	   			</div>
+	   			<div id="overdue">	
+	   				<p:link value="Overdue" outcome="overdue" styleClass="plinkCustom" ></p:link>
+				</div>
+				<div id="testing">
+					<p:link value="Testing" styleClass="plinkCustom" ></p:link>
+				</div>
+				<div id="tracking">
+					<p:link value="Tracking" outcome="tracking" styleClass="plinkCustom" ></p:link>
+				</div>			
+			</div>
+		<!--  -->
+			<div id="breadcrum_content">
+				<div id="createSuit">
+					<p:commandButton value="Create" icon="fa fa-plus" styleClass="suitCustom" onclick="PF('dlg2').show();"/>
+					<p:commandButton value="Open" icon="fa fa-folder-open" styleClass="suitCustom" onclick="PF('dlg3').show();"/>
+				</div>
+				
+				<p:dialog id="dlgSuit" header="Test suits" widgetVar="dlg2" modal="true" resizable="false" width="500px" height="300" >
+					<h:panelGrid columns="2" >
+						<p:outputLabel value="Name" />
+						<p:inputText value="#{testScenarioController.suitName}" styleClass="inputCustom" />
+						<p:outputLabel value="Expectation"/>
+						<p:inputTextarea value="#{testScenarioController.expectation}" cols="33" rows="5" maxlength="70" />
+						<p:outputLabel/>
+						<p:commandButton value="Create" action="#{testScenarioController.CreateSuit()}"  onsuccess="PF('dlg2').hide();" update=":form_testing,dlgSuit" styleClass="buttonCus"/>
+					</h:panelGrid>
+				</p:dialog>
+				
+				<p:dialog header="List test suits" widgetVar="dlg3" modal="true" resizable="false" width="500px" height="300" >					
+						<p:selectManyCheckbox label="Select suit" value="#{testScenarioController.selectedSuit}" columns="1" layout="grid"  >
+							<f:selectItems  value="#{testScenarioController.allSuit}" var="suit" itemLabel="#{suit.testSuitName}" itemValue="#{suit.testSuitName}" ></f:selectItems>
+						</p:selectManyCheckbox>
+						<p:commandButton value="Select" action="#{testScenarioController.SelectedSuits}" onsuccess="PF('dlg3').hide();"></p:commandButton>					
+				</p:dialog>
+			</div>
+					
+			<div id="main_content">
+			  <div id="wrap_main_content">
+				<div id="table_content">
+				<p:commandButton ajax="false" value="New test case" icon="fa fa-plus" styleClass="testcaseCustom" action="testcase.xhtml?faces-redirect=true"/>
+
+				<p:commandButton value="Delete" icon="fa fa-remove" styleClass="removeCustom" rendered="#{testScenarioController.adminAllowedAccess}"/>
+				<p:commandButton value="Refresh" icon="fa fa-refresh" styleClass="refreshCustom" update=":form_testing" />			 	
+			
+				<p:dataTable id="testing" rowKey="#{item.id}" selectionMode="single" selection="#{testScenarioController.selectedCase}" paginator="true" paginatorPosition="bottom" rows="10" var="item" value="#{testScenarioController.allCase}" widgetVar="carsTable">
+				    <p:column headerText="Id" style="width:50px;" sortBy="#{item.id}">
+				        <h:outputText value="#{item.id}" />
+				    </p:column>
+				 
+				    <p:column headerText="Name" style="width:200px;" sortBy="#{item.caseName}">
+				        <h:outputText value="#{item.caseName}" />
+				    </p:column>
+				 
+				    <p:column headerText="Status" style="width:80px;" sortBy="#{item.status}">
+				        <h:outputText value="#{item.status}"/>
+				    </p:column>
+				 
+				    <p:column headerText="Owner" sortBy="#{item.owner}">
+				        <h:outputText value="#{item.owner}" />
+				    </p:column>
+				    
+				    <p:column headerText="Executed" style="width:180px;" sortBy="#{item.executedDate}">
+				        <h:outputText value="#{item.executedDate}">
+				        	<f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
+				        </h:outputText>
+				    </p:column>
+				    
+				    <p:column headerText="Author" sortBy="#{item.author}">
+				        <h:outputText value="#{item.author}"/>
+				    </p:column>
+				    
+				    <p:column headerText="Priority" style="width:80px;" sortBy="#{item.priority}">
+				        <h:outputText value="#{item.priority}"/>
+				    </p:column>	
+				    
+				    <p:column style="width:50px;text-align:center">
+				    	<h:button outcome="testcaseDetail" value="View" title="view">
+				    		<f:param name="id" value="#{item.id}" />
+				    	</h:button>
+				    </p:column>			    
+				</p:dataTable>
+				</div>				
+			</div>
+		  </div>
+		</div>
+		<div id="footer">		
+		</div>
+    </h:form>
+</body> 
+</html>
