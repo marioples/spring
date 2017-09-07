@@ -27,12 +27,6 @@ public class TestCaseServiceImpl implements TestCaseServise{
 	}
 
 	@Override
-	public void update(TestCase testCase) {
-		testCaseRepository.save(testCase);
-		
-	}
-
-	@Override
 	public TestCase findbyId(int id) {
 		TestCase testCase = testCaseRepository.findbyId(id);
 		return testCase;
@@ -71,16 +65,6 @@ public class TestCaseServiceImpl implements TestCaseServise{
 	@Override
 	public Long countTotal() {
 		return testCaseRepository.countTotal();
-	}
-
-	@Override
-	public void saveTestCase(TestCase testCase) {
-		testCaseRepository.save(testCase);
-	}
-
-	@Override
-	public List<TestCase> testHasBeenAssigned(String username) {
-		return testCaseRepository.testHasBeenAssigned(username);
 	}
 
 	@Override

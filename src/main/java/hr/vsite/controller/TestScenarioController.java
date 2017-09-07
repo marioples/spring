@@ -67,6 +67,7 @@ public class TestScenarioController {
 	}
 	
 	public String backToLogin(){
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		SecurityContextHolder.clearContext();
         return "redirectFromScenarioToLogin";
 	}

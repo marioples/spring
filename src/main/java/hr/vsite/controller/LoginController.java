@@ -34,9 +34,4 @@ public class LoginController {
 
         return null;
 	}
-	
-	public String Logout(){
-		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();		
-		return "/login?faces-redirect=true";
-	}
 }

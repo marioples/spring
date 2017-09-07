@@ -3,9 +3,7 @@ package hr.vsite.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -16,7 +14,6 @@ import javax.faces.model.SelectItemGroup;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.javaplugs.jsf.SpringScopeView;
@@ -24,6 +21,7 @@ import com.github.javaplugs.jsf.SpringScopeView;
 import hr.vsite.model.Comment;
 import hr.vsite.model.TestCase;
 import hr.vsite.model.TestSuit;
+import hr.vsite.model.TestingSteps;
 import hr.vsite.services.interfaces.SecurityService;
 import hr.vsite.services.interfaces.TestCaseServise;
 import hr.vsite.services.interfaces.TestSuitService;
@@ -57,13 +55,12 @@ public class TestCaseController implements Serializable {
 	private Date executionDate;
 	private Date createdDate;
 	private List<Comment> comment;
-	
-	private List<String> items;    
-    private LinkedHashMap<String, Boolean> checkMap;
     
     private String step;
 	private List<String> selectedLink;
 	private String[] relatedSuit;
+	
+	private List<TestingSteps> testingSteps;
 	
 	private List<SelectItem> subEnvironment;
 	
@@ -90,16 +87,18 @@ public class TestCaseController implements Serializable {
 	
 	@PostConstruct
 	private void init(){
-		items = new ArrayList<String>();
+		testingSteps = new ArrayList<TestingSteps>(); 
 		comment = new ArrayList<Comment>();
-		checkMap = new LinkedHashMap<String, Boolean>();
 		initializeGroup();
 	}
 	
 	public void saveStep(){
 		if(MAX_STEPS < 10){
-			items.add(getStep());
-			checkMap.put(getStep(), Boolean.FALSE);
+			TestingSteps steps = new TestingSteps();
+			steps.setStep(getStep());
+			steps.setChecked(false);
+			
+			testingSteps.add(steps);
 			displayMessage();
 			MAX_STEPS++;
 		}		
@@ -111,8 +110,8 @@ public class TestCaseController implements Serializable {
 	}
 	
 	private void displayTestStatus(String status){
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, new FacesMessage("Test case", "With status " + status));
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null, new FacesMessage("Test case", "With status " + status));
 	}
 	
 	public void saveComment(){
@@ -139,10 +138,16 @@ public class TestCaseController implements Serializable {
 		now = new Date();
 		createdDate = now;
 		
+		MAX_STEPS = 0;
+		
 		TestCase testCase = new TestCase();		
 		
 		for(Comment c : comment){
 			c.setTestCase(testCase);
+		}
+		
+		for(TestingSteps ts : testingSteps){
+			ts.setSteptestCase(testCase);
 		}
 		
 		testCase.setCaseName(getCaseName());
@@ -156,17 +161,17 @@ public class TestCaseController implements Serializable {
 		testCase.setPrerequisites(getPrerequisites());
 		testCase.setPriority(getPriority());
 		testCase.setStatus(getStatus());
-		testCase.setSteps(getCheckMap());
+		testCase.setTestingSteps(getTestingSteps());
 		testCase.setReleatedLink(getSelectedLink());
 		testCase.setProgress(getProgress());
 		testCase.setComments(getComment());
 		
 		if(!(getAuthor().equals(getOwner()))){
-			testCase.setSeen(false);
+			testCase.setIsAssigned(true);
 		}
 		
 		if(getAuthor().equals(getOwner())){
-			testCase.setSeen(true);
+			testCase.setIsAssigned(true);
 		}
 		
 		if(relatedSuit.length > 0 && relatedSuit.length < 2){
@@ -174,21 +179,21 @@ public class TestCaseController implements Serializable {
 			TestSuit suit = testSuitService.findById(id);
 			testCase.setSuit(suit);
 		} 							
-		testCaseServise.saveTestCase(testCase);
+		testCaseServise.save(testCase);
 		
 		return "testscenario.xhtml?faces-redirect=true";
 	}
 	
 	public void confirmButton() {
-		for(Entry<String, Boolean> entry : checkMap.entrySet()){
-			if(entry.getValue() == Boolean.TRUE)
-			{
+		for(TestingSteps ts : testingSteps){
+			if(ts.getChecked() == Boolean.TRUE){
 				countCheck++;
 			}
-			if(entry.getValue() == Boolean.TRUE || entry.getValue() == Boolean.FALSE){
+			if(ts.getChecked() == Boolean.TRUE || ts.getChecked() == Boolean.FALSE){
 				countAddedStep++;
 			}
 		}
+		
 		progress = (int)(countCheck * 100 / countAddedStep);
 
 		if(countAddedStep == countCheck){
@@ -351,18 +356,7 @@ public class TestCaseController implements Serializable {
 	public void setComment(List<Comment> comment) {
 		this.comment = comment;
 	}
-	public List<String> getItems() {
-		return items;
-	}
-	public void setItems(List<String> items) {
-		this.items = items;
-	}
-	public LinkedHashMap<String, Boolean> getCheckMap() {
-		return checkMap;
-	}
-	public void setCheckMap(LinkedHashMap<String, Boolean> checkMap) {
-		this.checkMap = checkMap;
-	}
+	
 	public String getStep() {
 		return step;
 	}
@@ -416,6 +410,14 @@ public class TestCaseController implements Serializable {
 	}
 	public void setNow(Date now) {
 		this.now = now;
+	}
+	
+	public List<TestingSteps> getTestingSteps() {
+		return testingSteps;
+	}
+
+	public void setTestingSteps(List<TestingSteps> testingSteps) {
+		this.testingSteps = testingSteps;
 	}
 
 }

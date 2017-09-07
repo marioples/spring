@@ -20,8 +20,8 @@ public interface TestCaseRepository extends JpaRepository<TestCase, Long>, Custo
 	List<TestCase> findDailyTests();
 
 	@Override
-	@Query("select t from TestCase t where trunc(t.executedDate) < trunc(SYSDATE)"
-			+ " and t.status LIKE 'Not run' and t.owner LIKE :name")
+	@Query("select t from TestCase t where (trunc(t.executedDate) < trunc(SYSDATE)"
+			+ " and t.status LIKE 'Not run') or (t.isAssigned = true and t.owner LIKE :name)")
 	List<TestCase> ovredueTests(@Param("name") String name);
 
 	@Override
@@ -48,10 +48,6 @@ public interface TestCaseRepository extends JpaRepository<TestCase, Long>, Custo
 	@Query("SELECT COUNT(t.id) FROM TestCase t " +
 			"WHERE TRUNC(t.executedDate) < TRUNC(SYSDATE) AND t.status LIKE 'Not run' AND t.owner LIKE :user")
 	Long countOvredueTests(@Param("user") String user);
-
-	@Override
-	@Query("select t from TestCase t where t.owner LIKE :username and t.seen LIKE false")
-	List<TestCase> testHasBeenAssigned(@Param("username")String username);
 
 	@Override
 	@Query("select t from TestCase t")

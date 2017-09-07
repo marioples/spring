@@ -3,6 +3,7 @@ package hr.vsite.controller;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
@@ -46,6 +47,7 @@ public class OverdueController {
 	}
 	
 	public String backToLogin(){
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		SecurityContextHolder.clearContext();
         return "redirectFromOverdueToLogin";
 	}

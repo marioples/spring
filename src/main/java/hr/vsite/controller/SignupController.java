@@ -19,12 +19,10 @@ import hr.vsite.services.interfaces.SecurityService;
 import hr.vsite.services.interfaces.UserServices;
 
 @Scope("session")
-@Component(value = "signupController") // Spring-managed.
+@Component(value = "signupController")
 @ELBeanName(value = "signupController")
 @Join(path = "/signup", to = "/signup.jsf")
-public class SignupController {
-	
-	private final Logger logger = LoggerFactory.getLogger(SignupController.class); 
+public class SignupController { 
 	
 	private static final String ROLE_ADMIN = "ROLE_ADMIN";
 	private static final String ROLE_USER = "ROLE_USER";
@@ -32,7 +30,9 @@ public class SignupController {
 	private String _username;
 	private String _email;
 	private String _password;
-	private String _passwordConfirm;		
+	private String _passwordConfirm;
+	
+	private Boolean isAdminRoleChecked;
 
 	@Autowired
 	private UserServices userServices;
@@ -49,7 +49,14 @@ public class SignupController {
 	public String registration(){
 		
 		Role role = new Role();
-		role.setName(ROLE_USER);
+		
+		if(isAdminRoleChecked == true){
+			role.setName(ROLE_ADMIN);
+		}
+		if(isAdminRoleChecked == false){
+			role.setName(ROLE_USER);
+		}
+		
 		roleService.save(role);
 		
 		List<Role> listOfRole = new LinkedList<Role>();
@@ -62,8 +69,6 @@ public class SignupController {
 		user.setPassword(bCryptPasswordEncoder.encode(_password));
 		user.setRolesOfUsers(listOfRole);
 		user.setPasswordConfirm(_passwordConfirm);
-		
-		logger.info("User successfully created");
 		
 		userServices.save(user);
 		
@@ -102,5 +107,13 @@ public class SignupController {
 
 	public void set_passwordConfirm(String _passwordConfirm) {
 		this._passwordConfirm = _passwordConfirm;
+	}
+
+	public Boolean getIsAdminRoleChecked() {
+		return isAdminRoleChecked;
+	}
+
+	public void setIsAdminRoleChecked(Boolean isAdminRoleChecked) {
+		this.isAdminRoleChecked = isAdminRoleChecked;
 	}	
 }

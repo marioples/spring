@@ -74,13 +74,6 @@ public class TestCase implements Serializable {
 	@Column(name = "EXECUTION_DATE")
 	private java.util.Date executedDate;
 	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@MapKeyColumn(name="name")
-	@OrderColumn(name="name")
-	@Column(name="value")
-	@CollectionTable(name="teststeps", joinColumns=@JoinColumn(name="ID"))
-	private Map<String, Boolean> steps = new LinkedHashMap<String, Boolean>();
-	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
 	@CollectionTable(name="track")
@@ -100,11 +93,14 @@ public class TestCase implements Serializable {
 	@Column(name="SUB_ENVIRONMENT")
 	private String subEnvironment;	
 	
-	@Column(name = "SEEN")
-	private Boolean seen;
+	@Column(name = "ASSIGNED")
+	private Boolean isAssigned;
 	
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = TestSuit.class)
 	private TestSuit suit;
+	
+	@OneToMany(mappedBy="steptestCase", orphanRemoval=true, fetch = FetchType.EAGER, targetEntity=TestingSteps.class, cascade=CascadeType.ALL)
+	private List<TestingSteps> testingSteps;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="testCase", targetEntity=Comment.class, cascade=CascadeType.ALL)
@@ -167,7 +163,6 @@ public class TestCase implements Serializable {
 		this.caseName = caseName;
 	}
 
-
 	public String getStatus() {
 		return status;
 	}
@@ -199,15 +194,7 @@ public class TestCase implements Serializable {
 	public void setProgress(Integer progress) {
 		this.progress = progress;
 	}
-
-	public Map<String, Boolean> getSteps() {
-		return steps;
-	}
-
-	public void setSteps(Map<String, Boolean> steps) {
-		this.steps = steps;
-	}
-
+	
 	public List<String> getReleatedLink() {
 		return releatedLink;
 	}
@@ -248,19 +235,27 @@ public class TestCase implements Serializable {
 		this.subEnvironment = subEnvironment;
 	}
 
-	public Boolean getSeen() {
-		return seen;
-	}
-
-	public void setSeen(Boolean seen) {
-		this.seen = seen;
-	}
-
 	public List<Comment> getComments() {
 		return comments;
 	}
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public List<TestingSteps> getTestingSteps() {
+		return testingSteps;
+	}
+
+	public void setTestingSteps(List<TestingSteps> testingSteps) {
+		this.testingSteps = testingSteps;
+	}
+
+	public Boolean getIsAssigned() {
+		return isAssigned;
+	}
+
+	public void setIsAssigned(Boolean isAssigned) {
+		this.isAssigned = isAssigned;
 	}
 }

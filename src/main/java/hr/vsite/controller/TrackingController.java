@@ -2,22 +2,16 @@ package hr.vsite.controller;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
-import org.primefaces.component.steps.Steps;
-import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CategoryAxis;
@@ -102,6 +96,7 @@ public class TrackingController implements Serializable{
 	}
 	
 	public String backToLogin(){
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		SecurityContextHolder.clearContext();
         return "redirectToLogin";
 	}
@@ -154,37 +149,31 @@ public class TrackingController implements Serializable{
 		TestCase selectedTestCase = testCaseServise.findbyId(id);			
 		isUpdateFlag = true;
 		updateTestCase = selectedTestCase;
-		System.out.println("Copy case with flag - " + isUpdateFlag);
 	}
 	
 	public void copyCase(){		
 		int id = selectedCase.get(0);
 		TestCase selectedTestCase = testCaseServise.findbyId(id);			
 		isCreateFlag = true;
-		copyTestCase = selectedTestCase;
-		System.out.println("Copy case with flag - " + isCreateFlag);
+		copyTestCase = selectedTestCase;		
 	}
 	
 	public TestCase SelectedTestCase(){
-		if(isUpdateFlag == true){					
-			System.out.println("Selected Case update flag - " + isUpdateFlag);
+		if(isUpdateFlag == true){								
 			return updateTestCase;			
 		}
-		if(isCreateFlag == true){
-			System.out.println("Selected Case copy flag - " + isCreateFlag);
+		if(isCreateFlag == true){			
 			return copyTestCase;
 		}
 		return null;
 	}
 	
 	public void update(){
-		System.out.println("Updateddddd method");
 		isUpdateFlag = false;
-		testCaseServise.saveTestCase(updateTestCase);
+		testCaseServise.save(updateTestCase);
 	}
 	
 	public void copyTest(){
-		System.out.println("Copyyyyyyyyy method");
 		
 		Date now = new Date();
 		createdDate = now;
@@ -204,7 +193,7 @@ public class TrackingController implements Serializable{
 		createCase.setStatus(TEST_NOT_RUN);
 
 		isCreateFlag = false;
-		testCaseServise.saveTestCase(createCase);
+		testCaseServise.save(createCase);
 		
 	}
 	
@@ -313,9 +302,11 @@ public class TrackingController implements Serializable{
 		PercentTestPassed = (long) 0;
 		return (long) 0;
 	}
+	
 	public void setTestPassed(Long testPassed) {
 		TestPassed = testPassed;
 	}
+	
 	public Long getTestFailed() {
 		Long l = testCaseServise.countCases(TEST_FAILED);
 		if(TotalAmount != 0){
@@ -327,9 +318,11 @@ public class TrackingController implements Serializable{
 		PercentTestFailed = (long) 0;
 		return (long) 0;
 	}
+	
 	public void setTestFailed(Long testFailed) {
 		TestFailed = testFailed;
 	}
+	
 	public Long getTestNotRun() {
 		Long l = testCaseServise.countCases(TEST_NOT_RUN);
 		if(TotalAmount != 0){
@@ -341,9 +334,11 @@ public class TrackingController implements Serializable{
 		PercentTestNotRun = (long) 0;
 		return (long) 0;
 	}
+	
 	public void setTestNotRun(Long testNotRun) {
 		TestNotRun = testNotRun;
 	}
+	
 	public Long getTestBlocked() {
 		Long l = testCaseServise.countCases(TEST_BLOCKED);
 		if(TotalAmount != 0){

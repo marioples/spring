@@ -28,7 +28,6 @@
 						
 						<p:outputLabel value="Environment:" />
 						<p:selectOneMenu id="console" value="#{testCaseController.environment}" style="width:227px;" >
-				            <f:selectItem itemLabel="Database" itemValue="Database" />
 				            <f:selectItem itemLabel="OS" itemValue="OS" />
 				            <f:selectItem itemLabel="Browser" itemValue="Browser" />
 				        </p:selectOneMenu>
@@ -62,7 +61,7 @@
 				        <p:outputLabel value="Suits:" />    
 					    <p:selectCheckboxMenu id="SuitMenu" value="#{testCaseController.relatedSuit}" label="Suit"
 				                              filter="true" filterMatchMode="startsWith" panelStyle="width:300px">
-				            <f:selectItems value="#{testCaseController.AllSuit()}" var="suit" itemLabel="suit.testSuitName" itemValue="suit.id" /> 
+				            <f:selectItems value="#{testCaseController.AllSuit()}" var="suit" itemLabel="#{suit.testSuitName}" itemValue="#{suit.id}" /> 
 				        </p:selectCheckboxMenu>
 				        
 					</h:panelGrid>
@@ -75,19 +74,18 @@
 					<p:outputLabel value="Steps for testing:" style="margin-left:10px;"/>
 					<div id="testing_component">
 						<h:panelGroup id="display" style="font-size:120%" >	 							
-	    						<ui:repeat var="item" value="#{testCaseController.items}">
+	    						<ui:repeat var="item" value="#{testCaseController.testingSteps}">
 	    						<table>
-							        <tr><h:selectBooleanCheckbox value="#{testCaseController.checkMap[item]}"/></tr>
-							        <tr><h:outputText value="#{item}" /></tr>
+							        <tr><h:selectBooleanCheckbox value="#{item.checked}" /></tr>
+							        <tr><h:outputText value="#{item.step}" /></tr>
 							    </table> 
 							    </ui:repeat>					
 						</h:panelGroup>
-						<i><p:commandLink value="Add step" onclick="PF('dlg2').show();" styleClass="stepCustom" >
-							
-						</p:commandLink></i>
-						<p:commandButton value="Confirm" onclick="PF('pbAjax').start();" styleClass="confirmCustom" action="#{testCaseController.confirmButton}" />
+						<i><p:commandLink value="Add step" onclick="PF('dlg2').show();" styleClass="stepCustom" /></i>
+						
+
 					</div>
-					
+					<p:commandButton value="Confirm" update="growl" onclick="PF('pbAjax').start();" styleClass="confirmCustom" action="#{testCaseController.confirmButton}" />					
 					<p:dialog  header="Step" widgetVar="dlg2" modal="true" height="200" width="500" resizable="false">
 						    <h:panelGrid columns="2" style="margin-bottom:2px" cellpadding="1">
 							    <p:outputLabel value="Add step:" />

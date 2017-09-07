@@ -10,15 +10,11 @@ public interface TestCaseServise {
 	
 	void delete(TestCase testcase);
 	
-	void update(TestCase testCase);
-	
 	TestCase findbyId(int id);
 	
 	List<TestCase> getDailyTests();
 	
 	List<TestCase> ovredueTests(String name);
-	
-	List<TestCase> testHasBeenAssigned(String username);
 	
 	Long countOvredueTests(String user);
 	
@@ -31,8 +27,6 @@ public interface TestCaseServise {
 	Long countTotal();
 	
 	List<TestCase> findAllTestCases();
-
-	void saveTestCase(TestCase testCase);
 	
 	
 }

@@ -34,7 +34,6 @@
 						<p:outputLabel value="Environment:" />
 						<p:selectOneMenu id="console" value="#{testCaseDetailController.testCase.environment}" style="width:227px;" >
 				            <p:ajax event="blur" />
-				            <f:selectItem itemLabel="Database" itemValue="Database" />
 				            <f:selectItem itemLabel="OS" itemValue="OS" />
 				            <f:selectItem itemLabel="Browser" itemValue="Browser" />
 				        </p:selectOneMenu>
@@ -71,6 +70,7 @@
 				        </p:selectCheckboxMenu>
 				        
 				       
+				       
 				        
 					</h:panelGrid>
 					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
@@ -80,20 +80,27 @@
 					
 					<p:growl id="growl" showDetail="true" sticky="true" />
 					<p:outputLabel value="Steps for testing:" style="margin-left:10px;"/>
-					<div id="testing_component">
-						<h:panelGroup id="display" style="font-size:120%" >					
-	    					<ui:repeat var="item" value="#{testCaseDetailController.testCase.steps.entrySet()}">
+					<div id="testing_component">						
+						<h:panelGroup id="display" style="font-size:120%" >				
+	    					<ui:repeat var="item" value="#{testCaseDetailController.testCase.testingSteps}">
 	    						<table>
-							        <tr><h:selectBooleanCheckbox value="#{testCaseDetailController.testCase.steps[item]}" converter="javax.faces.Boolean" /></tr>
-							        <tr><h:outputText value="#{testCaseDetailController.testCase.steps[item]}" /></tr>
+							        <tr><h:selectBooleanCheckbox value="#{item.checked}" /></tr>
+							        <tr><h:outputText value="#{item.step}" /></tr>
 							    </table> 
 							</ui:repeat>				    											
 						</h:panelGroup>
+						<p:dialog  header="Step" widgetVar="dlg2" modal="true" height="200" width="500" resizable="false">
+						    <h:panelGrid columns="2" style="margin-bottom:2px" cellpadding="1">
+							    <p:outputLabel value="Add step:" />
+							    <p:inputTextarea maxlength="70" value="#{testCaseDetailController.step}" rows="6" cols="33" />
+							    <p:outputLabel/>
+							    <p:commandButton value="Add" action="#{testCaseDetailController.saveStep()}"  update="display,growl" onsuccess="PF('dlg2').hide();" styleClass="buttonCus"/>								     
+							</h:panelGrid>
+						</p:dialog>
 						
 						<i><p:commandLink value="Add step" onclick="PF('dlg2').show();" styleClass="stepCustom" /></i>
-						<p:commandButton value="Confirm" onclick="PF('pbAjax').start();" styleClass="confirmCustom" action="#{testCaseDetailController.confirmButton()}" />			
+						<p:commandButton value="Confirm" onclick="PF('pbAjax').start();" styleClass="confirmCustom" action="#{testCaseDetailController.confirmButton()}" update="detailForm:growl"  />			
 					</div>
-					
 					<p:dialog  header="Step" widgetVar="dlg2" modal="true" height="200" width="500" resizable="false">
 						    <h:panelGrid columns="2" style="margin-bottom:2px" cellpadding="1">
 							    <p:outputLabel value="Add step:" />
@@ -102,6 +109,7 @@
 							    <p:commandButton value="Add" action="#{testCaseDetailController.saveStep()}"  update="display,growl" onsuccess="PF('dlg2').hide();" styleClass="buttonCus"/>								     
 							</h:panelGrid>
 					</p:dialog>
+				
 									
 				</div>
 				

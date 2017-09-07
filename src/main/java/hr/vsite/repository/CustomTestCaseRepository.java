@@ -14,8 +14,6 @@ public interface CustomTestCaseRepository {
 	
 	List<TestCase> findAllCasesWithParametar(String SuitName);
 	
-	List<TestCase> testHasBeenAssigned(String username);
-	
 	Long countTestcases(String date, String status);
 	
 	Long countCases(String Status);
