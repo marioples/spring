@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import hr.vsite.model.TestCase;
 import hr.vsite.services.interfaces.SecurityService;
-import hr.vsite.services.interfaces.TestCaseServise;
+import hr.vsite.services.interfaces.TestCaseService;
 
 @Scope("request")
 @Component(value = "overdueController")
@@ -29,7 +29,7 @@ public class OverdueController {
 	private List<TestCase> OverdueTests;
 	
 	@Autowired
-	private TestCaseServise testCaseServise;
+	private TestCaseService testCaseServise;
 	
 	@Autowired
 	private SecurityService securityService;
@@ -40,7 +40,7 @@ public class OverdueController {
 	}	
 
 	public List<TestCase> getOverdueTests() {
-		List<TestCase> overdue = testCaseServise.ovredueTests(userName);
+		List<TestCase> overdue = testCaseServise.ovredueOrAssignedTests(userName);
 		if(overdue != null)
 			return overdue;
 		return null;

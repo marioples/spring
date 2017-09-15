@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import hr.vsite.model.TestCase;
 import hr.vsite.model.TestSuit;
 import hr.vsite.services.interfaces.SecurityService;
-import hr.vsite.services.interfaces.TestCaseServise;
+import hr.vsite.services.interfaces.TestCaseService;
 import hr.vsite.services.interfaces.TestSuitService;
 
 @Scope("session")
@@ -43,6 +43,9 @@ public class TrackingController implements Serializable{
 	private static final String TEST_FAILED = "Failed";
 	private static final String TEST_NOT_RUN = "Not run";
 	private static final String TEST_BLOCKED = "Blocked";
+	
+	private static final Integer ONE_DAY_AGO = 1;
+	private static final Integer NINE_DAY_AGO = 9;
 	
 	public Long TestPassed;
 	public Long TestFailed;
@@ -72,6 +75,15 @@ public class TrackingController implements Serializable{
 	private String suitName;
 	private String expecation;
 	
+	private Date startDate;
+	private Date endDate;
+	
+	private String displayStartDate;
+	private String displayEndDate;
+	
+	private int endDay = 1;
+	private int startDay = 10;
+	
 	private String userName;
 
 	private String dailyRecords;
@@ -83,7 +95,7 @@ public class TrackingController implements Serializable{
 	private SecurityService securityService;
 	
 	@Autowired
-	private TestCaseServise testCaseServise;
+	private TestCaseService testCaseServise;
 	
 	@Autowired
 	private TestSuitService testSuitService;
@@ -91,7 +103,7 @@ public class TrackingController implements Serializable{
 	@PostConstruct
 	public void init(){
 		createAnimatedModel();
-		TotalAmount = testCaseServise.countTotal();
+		diplayChartDetail();
 		userName = securityService.findLoggedInUsername();
 	}
 	
@@ -111,6 +123,35 @@ public class TrackingController implements Serializable{
 		dailyDate = sdf.format(today);
 		
 		return dailyDate;
+	}
+	
+	public void diplayChartDetail(){
+		displayStartDate = dateFormat(NINE_DAY_AGO, PatternDayMonth);
+		displayEndDate = dateFormat(ONE_DAY_AGO, PatternDayMonth);
+		
+		TotalAmount = testCaseServise.countStartEndDate(NINE_DAY_AGO, ONE_DAY_AGO);
+	}
+	
+	public void CalculateStartEndDate(){
+		if((startDate != null) && (endDate != null)){
+			Date currentDate = new Date();			
+			
+			endDay = (daysBetween(endDate, currentDate)) - 1;
+			startDay = daysBetween(startDate, currentDate);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat(PatternDayMonth);
+			
+			displayStartDate = sdf.format(startDate.getTime());
+			displayEndDate = sdf.format(endDate.getTime());
+			
+			createAnimatedModel();
+			
+			TotalAmount = testCaseServise.countStartEndDate(startDay, endDay);
+		}		
+	}
+	
+	public int daysBetween(Date date, Date currentDate){		
+		return (int) ((((currentDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))) + 1);
 	}
 	
 	public List<TestCase> getDailyRecords() {
@@ -219,7 +260,7 @@ public class TrackingController implements Serializable{
 	
 	private LineChartModel createAnimatedModel(){
 		chart = new LineChartModel();
-		
+
 		chart.setAnimate(true);
 		chart.setLegendPosition("se");
 		chart.setSeriesColors("268436,D64B28,C0C0C0,E8E81B");
@@ -234,33 +275,33 @@ public class TrackingController implements Serializable{
 		yAxis.setLabel("Test cases");
 		
 		xAxis.setMin(0);
-		xAxis.setMax(10);
+		xAxis.setMax(100);
 		
 		LineChartSeries casePassed = new LineChartSeries();
 		casePassed.setLabel(TEST_PASSED);		 		
 		
-		for(int i = 1; i != 10; i++){
+		for(int i = endDay; i != startDay; i++){
 			drawNodeOnGrid(casePassed, TEST_PASSED, i);
 		}
 		
 		LineChartSeries caseFailed = new LineChartSeries();
 		caseFailed.setLabel(TEST_FAILED);
 		
-		for(int i = 1; i != 10; i++){
+		for(int i = endDay; i != startDay; i++){
 			drawNodeOnGrid(caseFailed, TEST_FAILED, i);
 		}
 		
 		LineChartSeries caseNotRun = new LineChartSeries();
 		caseNotRun.setLabel(TEST_NOT_RUN);
 		
-		for(int i = 1; i != 10; i++){
+		for(int i = endDay; i != startDay; i++){
 			drawNodeOnGrid(caseNotRun, TEST_NOT_RUN, i);
 		}
 		
 		LineChartSeries caseBlocked = new LineChartSeries();
 		caseBlocked.setLabel(TEST_BLOCKED);
 		
-		for(int i = 1; i != 10; i++){
+		for(int i = endDay; i != startDay; i++){
 			drawNodeOnGrid(caseBlocked, TEST_BLOCKED, i);
 		}
 		
@@ -291,7 +332,7 @@ public class TrackingController implements Serializable{
 	}
 		
 	public Long getTestPassed() {
-		Long l = testCaseServise.countCases(TEST_PASSED);
+		Long l = testCaseServise.countCases(TEST_PASSED, startDay, endDay);
 		if(TotalAmount != 0){
 			PercentTestPassed = (l * 100 / TotalAmount);
 			
@@ -308,7 +349,7 @@ public class TrackingController implements Serializable{
 	}
 	
 	public Long getTestFailed() {
-		Long l = testCaseServise.countCases(TEST_FAILED);
+		Long l = testCaseServise.countCases(TEST_FAILED, startDay, endDay);
 		if(TotalAmount != 0){
 			PercentTestFailed = (l * 100 / TotalAmount);			
 			if(l <= 0)
@@ -324,7 +365,7 @@ public class TrackingController implements Serializable{
 	}
 	
 	public Long getTestNotRun() {
-		Long l = testCaseServise.countCases(TEST_NOT_RUN);
+		Long l = testCaseServise.countCases(TEST_NOT_RUN, startDay, endDay);
 		if(TotalAmount != 0){
 			PercentTestNotRun = (l * 100 / TotalAmount);
 			if(l <= 0)
@@ -340,7 +381,7 @@ public class TrackingController implements Serializable{
 	}
 	
 	public Long getTestBlocked() {
-		Long l = testCaseServise.countCases(TEST_BLOCKED);
+		Long l = testCaseServise.countCases(TEST_BLOCKED, startDay, endDay);
 		if(TotalAmount != 0){
 			PercentTestBlocked = (l * 100 / TotalAmount);
 			if(l <= 0)
@@ -480,6 +521,54 @@ public class TrackingController implements Serializable{
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public int getEndDay() {
+		return endDay;
+	}
+
+	public void setEndDay(int endDay) {
+		this.endDay = endDay;
+	}
+
+	public int getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
+
+	public String getDisplayStartDate() {
+		return displayStartDate;
+	}
+
+	public void setDisplayStartDate(String displayStartDate) {
+		this.displayStartDate = displayStartDate;
+	}
+
+	public String getDisplayEndDate() {
+		return displayEndDate;
+	}
+
+	public void setDisplayEndDate(String displayEndDate) {
+		this.displayEndDate = displayEndDate;
 	}
 
 }

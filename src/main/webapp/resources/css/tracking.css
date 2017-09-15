@@ -5,7 +5,7 @@ body {
 }
 
 #wrap_tracking {
-	width: 1050px;
+	width: 1150px;
   	margin-left: auto;
   	margin-right: auto;
   	height: 800px;
@@ -23,7 +23,7 @@ body {
 }
 
 #chart_grid, #daily_activity {
-	width: 850px;
+	width: 950px;
 	height: 400px;
 }
 
@@ -35,7 +35,6 @@ body {
 #chart_name {
 	background-color: rgb(209, 229, 253);
 	height: 65px;
-	width: 850px;
 	line-height: 65px;
 }
 
@@ -43,7 +42,6 @@ body {
 	background-color: rgb(204, 204, 153);
 	border-color: rgb(215, 215, 215);
 	border-radius: 5px;
-	width: 850px;
 	height: 40px;
 	line-height: 40px; 
 }
@@ -62,7 +60,7 @@ body {
 
 #draw_chart {
 	height:300px;
-	width:700px;
+	width:800px;
 	float: left;
 	
 }

@@ -2,9 +2,7 @@ package hr.vsite.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -15,12 +13,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.OrderColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -76,9 +72,9 @@ public class TestCase implements Serializable {
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
-	@CollectionTable(name="track")
-	@MapKeyColumn (name = "position")
-	@Column(name = "title")
+	@CollectionTable(name="Links")
+	@MapKeyColumn (name = "LinkPosition")
+	@Column(name = "LinkTitle")
 	private List<String> releatedLink = new ArrayList<String>();
 	
 	@Column(name="PROGRESS")

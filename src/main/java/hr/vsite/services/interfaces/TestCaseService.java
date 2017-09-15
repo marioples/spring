@@ -4,7 +4,7 @@ import java.util.List;
 
 import hr.vsite.model.TestCase;
 
-public interface TestCaseServise {
+public interface TestCaseService {
 
 	void save(TestCase testCase);
 	
@@ -14,7 +14,7 @@ public interface TestCaseServise {
 	
 	List<TestCase> getDailyTests();
 	
-	List<TestCase> ovredueTests(String name);
+	List<TestCase> ovredueOrAssignedTests(String name);
 	
 	Long countOvredueTests(String user);
 	
@@ -22,11 +22,11 @@ public interface TestCaseServise {
 	
 	Long countTestcases(String date, String status);
 	
-	Long countCases(String Status);
-	
-	Long countTotal();
+	Long countCases(String Status, Integer start, Integer end);
 	
 	List<TestCase> findAllTestCases();
 	
+	Long countStartEndDate(Integer d1, Integer d2);
 	
+	List<TestCase> findByCaseNameAuthorOwner(String name, String author, String owner);
 }

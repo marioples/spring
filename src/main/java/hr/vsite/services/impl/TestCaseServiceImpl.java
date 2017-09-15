@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import hr.vsite.model.TestCase;
 import hr.vsite.repository.TestCaseRepository;
-import hr.vsite.services.interfaces.TestCaseServise;
+import hr.vsite.services.interfaces.TestCaseService;
 
 @Service
-public class TestCaseServiceImpl implements TestCaseServise{
+public class TestCaseServiceImpl implements TestCaseService{
 
 	@Autowired
 	private TestCaseRepository testCaseRepository;
@@ -38,8 +38,8 @@ public class TestCaseServiceImpl implements TestCaseServise{
 	}
 
 	@Override
-	public List<TestCase> ovredueTests(String name) {
-		return testCaseRepository.ovredueTests(name);
+	public List<TestCase> ovredueOrAssignedTests(String name) {
+		return testCaseRepository.ovredueOrAssignedTests(name);
 	}
 
 	@Override
@@ -58,17 +58,22 @@ public class TestCaseServiceImpl implements TestCaseServise{
 	}
 
 	@Override
-	public Long countCases(String Status) {
-		return testCaseRepository.countCases(Status);
-	}
-
-	@Override
-	public Long countTotal() {
-		return testCaseRepository.countTotal();
+	public Long countCases(String Status, Integer start, Integer end) {
+		return testCaseRepository.countCases(Status, start, end);
 	}
 
 	@Override
 	public List<TestCase> findAllTestCases() {
 		return testCaseRepository.findAllTestCases();
+	}
+
+	@Override
+	public Long countStartEndDate(Integer d1, Integer d2) {
+		return testCaseRepository.countTotalStartEndDate(d1, d2);
+	}
+
+	@Override
+	public List<TestCase> findByCaseNameAuthorOwner(String name, String author, String owner) {
+		return testCaseRepository.findByCaseNameAuthorOwner(name, author, owner);
 	}
 }

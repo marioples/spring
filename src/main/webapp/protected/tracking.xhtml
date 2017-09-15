@@ -43,14 +43,17 @@
 			<div id="tracking_content">
 				<div id="chart_grid">	
 					<div id="chart_name">
-						<h:outputLabel value="Datahub" style="font-size:200%;margin-left:30px;"/>												
+						<h:outputLabel value="Datahub" style="font-size:200%;margin-left:30px;margin-right:65px;"/>From 
+						<p:calendar id="startDate" value="#{trackingController.startDate}" pattern="dd/MM/yyyy" />To							
+						<p:calendar id="endDate" value="#{trackingController.endDate}" pattern="dd/MM/yyyy" />
+						<p:commandButton ajax="true" value="Find" action="#{trackingController.CalculateStartEndDate()}" styleClass="searchCustom" update="LineChartGrid,fromTo,testPassedNum,testPassedPer,testFailedNum,testFailedPer,testNotRunNum,testNotRunPer,testBlockedNum,testBlockedPer" />
 					</div>
 					<div id="draw_chart">				
-						<p:chart type="line" model="#{trackingController.chart}" style="height:300px;width:700px;" >					
+						<p:chart id="LineChartGrid" type="line" model="#{trackingController.chart}" style="height:300px;width:800px;" >					
 						</p:chart>
 					</div>
 					<div id="chart_detail">
-						<h:outputText value="In the past 9 days:" style="font-size:20px;" />
+						<h:outputText id="fromTo" value="From #{trackingController.displayStartDate} To #{trackingController.displayEndDate}" style="font-size:17px;font-weight:bold;" />
 						<div class="tests_details">
 							<div class="test_passed"/>
 							<div class="test_failed"/>
@@ -59,23 +62,23 @@
 						</div>
 						<div class="tests_numbers">
 							<h:panelGrid style="margin-top:10px;">
-								<h:outputLabel value="#{trackingController.testPassed} Test Passed" style="font-weight:bold;"/>
-								<h:outputLabel value="#{trackingController.percentTestPassed}% set Passed" />
+								<h:outputLabel id="testPassedNum" value="#{trackingController.testPassed} Test Passed" style="font-weight:bold;"/>
+								<h:outputLabel id="testPassedPer" value="#{trackingController.percentTestPassed}% set Passed" />
 							</h:panelGrid>
 							
 							<h:panelGrid style="margin-bottom:10px;">
-								<h:outputLabel value="#{trackingController.testFailed} Test Failed" style="font-weight:bold;" />
-								<h:outputLabel value="#{trackingController.percentTestFailed}% set Failed" />
+								<h:outputLabel id="testFailedNum" value="#{trackingController.testFailed} Test Failed" style="font-weight:bold;" />
+								<h:outputLabel id="testFailedPer" value="#{trackingController.percentTestFailed}% set Failed" />
 							</h:panelGrid>
 							
 							<h:panelGrid style="margin-bottom:10px;">
-								<h:outputLabel value="#{trackingController.testNotRun} Test Not run" style="font-weight:bold;"/>
-								<h:outputLabel value="#{trackingController.percentTestNotRun}% set Not run" />
+								<h:outputLabel id="testNotRunNum" value="#{trackingController.testNotRun} Test Not run" style="font-weight:bold;"/>
+								<h:outputLabel id="testNotRunPer" value="#{trackingController.percentTestNotRun}% set Not run" />
 							</h:panelGrid>
 							
 							<h:panelGrid>
-								<h:outputLabel value="#{trackingController.testBlocked} Test Blocked" style="font-weight:bold;"/>
-								<h:outputLabel value="#{trackingController.percentTestBlocked}% set Blocked" />
+								<h:outputLabel id="testBlockedNum" value="#{trackingController.testBlocked} Test Blocked" style="font-weight:bold;"/>
+								<h:outputLabel id="testBlockedPer" value="#{trackingController.percentTestBlocked}% set Blocked" />
 							</h:panelGrid>
 						</div>	
 					</div>
@@ -83,7 +86,7 @@
 				<div id="daily_activity">	
 					<div id="activity">
 						<h:outputLabel value="Activity" style="font-size:125%;margin-left:30px;"/>
-						<h:outputLabel value="History | Test runs" style="font-size:100%;margin-left:570px;"/>
+						<h:outputLabel value="History | Test runs" style="font-size:100%;margin-left:650px;"/>
 					</div>
 					
 					<div id="tracking_activity">
@@ -231,7 +234,7 @@
 											<p:selectManyCheckbox label="Select suit" value="#{trackingController.selectSuit}" columns="1" layout="grid"  >
 												<f:selectItems  value="#{trackingController.allSuit}" var="suit" itemLabel="#{suit.testSuitName}" itemValue="#{suit.id}" ></f:selectItems>
 											</p:selectManyCheckbox>
-											<p:commandButton value="Delete" action="#{trackingController.deleteSuit()}" update="dlgSuitView" />
+											<p:commandButton value="Delete" rendered="#{trackingController.adminAllowedAccess}" action="#{trackingController.deleteSuit()}" update="dlgSuitView" />
 											<p:commandButton value="Cancel" onclick="dlg3.hide();" />
 									</p:dialog>
 							</div>						

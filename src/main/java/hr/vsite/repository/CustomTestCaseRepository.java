@@ -10,15 +10,17 @@ public interface CustomTestCaseRepository {
 	
 	List<TestCase> findAllTestCases();
 	
-	List<TestCase> ovredueTests(String name);
+	List<TestCase> ovredueOrAssignedTests(String name);
 	
 	List<TestCase> findAllCasesWithParametar(String SuitName);
 	
 	Long countTestcases(String date, String status);
 	
-	Long countCases(String Status);
-	
-	Long countTotal();
+	Long countCases(String Status, Integer start, Integer end);
 	
 	Long countOvredueTests(String user);
+	
+	Long countTotalStartEndDate(Integer start, Integer end);
+	
+	List<TestCase> findByCaseNameAuthorOwner(String name, String author, String owner);
 }

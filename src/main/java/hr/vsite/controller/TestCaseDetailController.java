@@ -23,7 +23,7 @@ import hr.vsite.model.TestCase;
 import hr.vsite.model.TestSuit;
 import hr.vsite.model.TestingSteps;
 import hr.vsite.services.interfaces.SecurityService;
-import hr.vsite.services.interfaces.TestCaseServise;
+import hr.vsite.services.interfaces.TestCaseService;
 import hr.vsite.services.interfaces.TestSuitService;
 import hr.vsite.services.interfaces.UserServices;
 
@@ -64,7 +64,7 @@ public class TestCaseDetailController implements Serializable{
 	private TestSuitService testSuitService;
 	
 	@Autowired
-	private TestCaseServise testCaseServise;
+	private TestCaseService testCaseServise;
 	
 	@Autowired
 	private UserServices userServices;
@@ -155,6 +155,10 @@ public class TestCaseDetailController implements Serializable{
 	public String update(){
 		Date update = new Date();		
 		
+		if(testCase.getStatus() == TEST_PASSED){
+			testCase.setIsAssigned(false);
+		}
+		
 		testCase.setUpdatedDate(update);
 		testCaseServise.save(testCase);
 		
@@ -216,7 +220,9 @@ public class TestCaseDetailController implements Serializable{
 		}
 		countCheck = 0;
 		countAddedStep = 0;
-
+		
+		testCase.setStatus(Status);
+		System.out.println("Confirm test status - " + testCase.getStatus());
 		displayTestStatus(Status);
 	}
 

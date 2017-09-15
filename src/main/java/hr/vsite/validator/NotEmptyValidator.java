@@ -26,27 +26,13 @@ public class NotEmptyValidator implements Validator {
 		
 		String parametar = object.toString();
 		
-		String checkUsername = "";
-		
-		/*if(parametar != null){
-			checkUsername = userServices.findUsernameByUsername(parametar);
-		}		
-		*/
 		if(parametar == null || parametar.isEmpty()){
 			FacesMessage msg = new FacesMessage("Not empty",
 					bundle.getString("Not.empty"));
 			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 			
 			throw new ValidatorException(msg);
-		}
-		
-		if(parametar.equals(checkUsername)){
-			FacesMessage msg = new FacesMessage("Username taken",
-					"Username has been taken, please chose diffrent");
-			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-			
-			throw new ValidatorException(msg);
-		}		
+		}	
 	}
 
 }

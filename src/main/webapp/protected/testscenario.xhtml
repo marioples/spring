@@ -21,8 +21,7 @@
 					<p:growl id="messages" />
 		    		<p:splitButton id="info_id" value="#{testScenarioController.userName}" update="messages" icon="fa fa-user" >
 			        	<p:separator />
-			        	<p:menuitem value="Logout" icon="icon-logout" action="#{testScenarioController.backToLogin()}"/>
-			        	
+			        	<p:menuitem value="Logout" icon="icon-logout" action="#{testScenarioController.backToLogin()}"/>			        	
 		   			</p:splitButton>
 	   			</div>
 	   			<div id="overdue">	
@@ -35,7 +34,6 @@
 					<p:link value="Tracking" outcome="tracking" styleClass="plinkCustom" ></p:link>
 				</div>			
 			</div>
-		<!--  -->
 			<div id="breadcrum_content">
 				<div id="createSuit">
 					<p:commandButton value="Create" icon="fa fa-plus" styleClass="suitCustom" onclick="PF('dlg2').show();"/>
@@ -67,36 +65,47 @@
 				<p:commandButton ajax="false" value="New test case" icon="fa fa-plus" styleClass="testcaseCustom" action="testcase.xhtml?faces-redirect=true"/>
 
 				<p:commandButton value="Delete" icon="fa fa-remove" styleClass="removeCustom" rendered="#{testScenarioController.adminAllowedAccess}"/>
-				<p:commandButton value="Refresh" icon="fa fa-refresh" styleClass="refreshCustom" update=":form_testing" />			 	
+				<p:commandButton value="Refresh" icon="fa fa-refresh" styleClass="refreshCustom" update=":form_testing" />
+				
+				<p:watermark for="keywordName" value="Search name"></p:watermark>
+				<p:inputText id="keywordName" value="#{testScenarioController.searchByName}" style="width:230px;"></p:inputText>
+				
+				<p:watermark for="keywordOwner" value="Search owner"></p:watermark>
+				<p:inputText id="keywordOwner" value="#{testScenarioController.searchByOwner}" style="width:150px;"></p:inputText>
+				
+				<p:watermark for="keywordAuthor" value="Search author"></p:watermark>
+				<p:inputText id="keywordAuthor" value="#{testScenarioController.searchByAuthor}" style="width:150px;"></p:inputText>
+				
+				<p:commandButton value="Search" styleClass="searchCustom" update="testing"></p:commandButton>			 	
 			
 				<p:dataTable id="testing" rowKey="#{item.id}" selectionMode="single" selection="#{testScenarioController.selectedCase}" paginator="true" paginatorPosition="bottom" rows="10" var="item" value="#{testScenarioController.allCase}" widgetVar="carsTable">
-				    <p:column headerText="Id" style="width:50px;" sortBy="#{item.id}">
+				    <p:column headerText="Id" style="width:50px;" >
 				        <h:outputText value="#{item.id}" />
 				    </p:column>
 				 
-				    <p:column headerText="Name" style="width:200px;" sortBy="#{item.caseName}">
+				    <p:column headerText="Name" style="width:200px;">
 				        <h:outputText value="#{item.caseName}" />
 				    </p:column>
 				 
-				    <p:column headerText="Status" style="width:80px;" sortBy="#{item.status}">
+				    <p:column headerText="Status" style="width:80px;" >
 				        <h:outputText value="#{item.status}"/>
 				    </p:column>
 				 
-				    <p:column headerText="Owner" sortBy="#{item.owner}">
+				    <p:column headerText="Owner" >
 				        <h:outputText value="#{item.owner}" />
 				    </p:column>
 				    
-				    <p:column headerText="Executed" style="width:180px;" sortBy="#{item.executedDate}">
+				    <p:column headerText="Executed" style="width:180px;" >
 				        <h:outputText value="#{item.executedDate}">
 				        	<f:convertDateTime type="date" pattern="dd.MM.yyyy"/>
 				        </h:outputText>
 				    </p:column>
 				    
-				    <p:column headerText="Author" sortBy="#{item.author}">
+				    <p:column headerText="Author" >
 				        <h:outputText value="#{item.author}"/>
 				    </p:column>
 				    
-				    <p:column headerText="Priority" style="width:80px;" sortBy="#{item.priority}">
+				    <p:column headerText="Priority" style="width:80px;" >
 				        <h:outputText value="#{item.priority}"/>
 				    </p:column>	
 				    

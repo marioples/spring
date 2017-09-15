@@ -44,10 +44,6 @@
 					</p:inputText>
 					<h:message for="input_confirmpass" style="color:red;"/>
 					
-					<p:outputLabel/>
-					<h:selectBooleanCheckbox value="#{signupController.isAdminRoleChecked}" label="Allow admin authorization" title="Allow admin authorization"  />
-					<p:outputLabel/>
-					
 					<p:outputLabel/>					
 					<p:commandButton id="btn_signup" value="Sign up" action="#{signupController.registration()}" styleClass="customStyleButton" update=":signupForm" />
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

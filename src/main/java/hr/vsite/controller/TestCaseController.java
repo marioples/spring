@@ -23,7 +23,7 @@ import hr.vsite.model.TestCase;
 import hr.vsite.model.TestSuit;
 import hr.vsite.model.TestingSteps;
 import hr.vsite.services.interfaces.SecurityService;
-import hr.vsite.services.interfaces.TestCaseServise;
+import hr.vsite.services.interfaces.TestCaseService;
 import hr.vsite.services.interfaces.TestSuitService;
 import hr.vsite.services.interfaces.UserServices;
 
@@ -77,7 +77,7 @@ public class TestCaseController implements Serializable {
 	private SecurityService securityService;
 	
 	@Autowired
-	private TestCaseServise testCaseServise;
+	private TestCaseService testCaseServise;
 	
 	@Autowired
 	private TestSuitService testSuitService;
@@ -95,6 +95,7 @@ public class TestCaseController implements Serializable {
 	public void saveStep(){
 		if(MAX_STEPS < 10){
 			TestingSteps steps = new TestingSteps();
+			
 			steps.setStep(getStep());
 			steps.setChecked(false);
 			
@@ -171,7 +172,7 @@ public class TestCaseController implements Serializable {
 		}
 		
 		if(getAuthor().equals(getOwner())){
-			testCase.setIsAssigned(true);
+			testCase.setIsAssigned(false);
 		}
 		
 		if(relatedSuit.length > 0 && relatedSuit.length < 2){

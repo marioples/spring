@@ -1,16 +1,9 @@
 package hr.vsite.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
@@ -22,7 +15,7 @@ import org.springframework.stereotype.Component;
 import hr.vsite.model.TestCase;
 import hr.vsite.model.TestSuit;
 import hr.vsite.services.interfaces.SecurityService;
-import hr.vsite.services.interfaces.TestCaseServise;
+import hr.vsite.services.interfaces.TestCaseService;
 import hr.vsite.services.interfaces.TestSuitService;
 
 @Scope("session")
@@ -40,11 +33,15 @@ public class TestScenarioController {
 	private String[] SelectedSuit;
 	private String oneSuit;
 	
+	private String searchByName;
+	private String searchByOwner;
+	private String searchByAuthor;
+	
 	private List<TestCase> AllCase;
 	private List<TestSuit> AllSuit;	
 	
 	@Autowired
-	private TestCaseServise testCaseServise ;
+	private TestCaseService testCaseService;
 	
 	@Autowired
 	private TestSuitService testSuitService;
@@ -85,17 +82,25 @@ public class TestScenarioController {
 	}
 	
 	public List<TestCase> getAllCase() {		
+		
+		if((searchByName != null && !searchByName.isEmpty()) || (searchByAuthor != null && !searchByAuthor.isEmpty()) || (searchByOwner != null && !searchByOwner.isEmpty())){
+			List<TestCase> multipleParametar = testCaseService.findByCaseNameAuthorOwner(searchByName, searchByAuthor, searchByOwner);			
+			if(multipleParametar != null)
+				return multipleParametar;
+		}
+				
 		if(oneSuit == null){
-			List<TestCase> testCase = testCaseServise.findAllTestCases();
+			List<TestCase> testCase = testCaseService.findAllTestCases();
 			if(testCase != null)
 				return testCase;
 		}
-		else if(oneSuit != null){
-			List<TestCase> testCaseWithSuit = testCaseServise.findAllCasesWithParametar(oneSuit);
+		
+		if(oneSuit != null){
+			List<TestCase> testCaseWithSuit = testCaseService.findAllCasesWithParametar(oneSuit);
 			if(testCaseWithSuit != null)
 				return testCaseWithSuit;
-		}		
-		return AllCase;
+		}
+		return null;
 	}
 	
 	public String testcase(){
@@ -164,5 +169,29 @@ public class TestScenarioController {
 
 	public String getUserName() {
 		return userName;
+	}
+
+	public String getSearchByName() {
+		return searchByName;
+	}
+
+	public void setSearchByName(String searchByName) {
+		this.searchByName = searchByName;
+	}
+
+	public String getSearchByOwner() {
+		return searchByOwner;
+	}
+
+	public void setSearchByOwner(String searchByOwner) {
+		this.searchByOwner = searchByOwner;
+	}
+
+	public String getSearchByAuthor() {
+		return searchByAuthor;
+	}
+
+	public void setSearchByAuthor(String searchByAuthor) {
+		this.searchByAuthor = searchByAuthor;
 	}
 }

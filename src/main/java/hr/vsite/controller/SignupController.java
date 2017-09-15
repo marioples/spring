@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,15 +22,12 @@ import hr.vsite.services.interfaces.UserServices;
 @Join(path = "/signup", to = "/signup.jsf")
 public class SignupController { 
 	
-	private static final String ROLE_ADMIN = "ROLE_ADMIN";
 	private static final String ROLE_USER = "ROLE_USER";
 	
 	private String _username;
 	private String _email;
 	private String _password;
 	private String _passwordConfirm;
-	
-	private Boolean isAdminRoleChecked;
 
 	@Autowired
 	private UserServices userServices;
@@ -50,12 +45,7 @@ public class SignupController {
 		
 		Role role = new Role();
 		
-		if(isAdminRoleChecked == true){
-			role.setName(ROLE_ADMIN);
-		}
-		if(isAdminRoleChecked == false){
-			role.setName(ROLE_USER);
-		}
+		role.setName(ROLE_USER);
 		
 		roleService.save(role);
 		
@@ -107,13 +97,5 @@ public class SignupController {
 
 	public void set_passwordConfirm(String _passwordConfirm) {
 		this._passwordConfirm = _passwordConfirm;
-	}
-
-	public Boolean getIsAdminRoleChecked() {
-		return isAdminRoleChecked;
-	}
-
-	public void setIsAdminRoleChecked(Boolean isAdminRoleChecked) {
-		this.isAdminRoleChecked = isAdminRoleChecked;
 	}	
 }
